@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -15,7 +14,7 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000") // URL de tu aplicación React
+            builder.WithOrigins("http://localhost:3000") 
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
@@ -37,7 +36,6 @@ using (var scope = app.Services.CreateScope())
 
 app.UseCors();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -54,7 +52,6 @@ app.MapGet("/employee/{id}", async (IDAO dao, int id) =>
 
 app.MapPost("/employee", async (IDAO dao, Employee employee) =>
 {
-    // La validación se maneja automáticamente. Solo implementa lógica adicional si es necesario.
     employee.Id = 0;
     await dao.AddEmployeeAsync(employee);
     return Results.Created($"/employee/{employee.Id}", employee);
@@ -66,7 +63,6 @@ app.MapPut("/employee/{id}", async (IDAO dao, int id, Employee updatedEmployee) 
     var employee = await dao.GetEmployeeByIdAsync(id);
     if (employee == null) return Results.NotFound();
 
-    // Actualiza las propiedades aquí. Considera la validación manual si es necesario.
     employee.FirstName = updatedEmployee.FirstName;
     employee.LastName = updatedEmployee.LastName;
     employee.Age = updatedEmployee.Age;
